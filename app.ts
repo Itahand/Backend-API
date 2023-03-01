@@ -8,7 +8,7 @@ import cors from "cors";
 import AppError from "./utilities/appError";
 import cookieSession from "cookie-session";
 
-import cookieParser from "cookie-parser"; // parse cookie header
+
 import { walletApiRoutes } from "./routes/walletAPI.routes";
 import { authRoutes } from "./routes/authRoutes.routes";
 import passport from "passport";
@@ -16,6 +16,7 @@ import mongoose from "mongoose";
 import { twitterMentions } from "./utilities/twitterMentions";
 import { stripeRoutes } from "./routes/stripeRoutes.routes";
 import { pieceRoutes } from "./routes/pieceRoutes";
+import cookieParser from "cookie-parser";
 
 const app = express(),
   port = process.env.PORT || 3000;
