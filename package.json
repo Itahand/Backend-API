@@ -1,5 +1,5 @@
 {
-  "name": "Backend-API",
+  "name": "backend-api",
   "version": "1.0.0",
   "description": "Piece API",
   "main": "index.js",
@@ -19,7 +19,7 @@
   "keywords": [
     "piece"
   ],
-  "author": "Noah Naizir",
+  "author": "Hemang Vora",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/piecegg/Backend-Blockchain/issues"
