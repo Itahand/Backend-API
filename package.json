@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "ts-node src/app.ts",
-    "dev": "ts-node-dev src/app.ts",
+    "dev": "nodemon -x ts-node src/app.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
