@@ -49,9 +49,9 @@ export const twitterMentions = async () => {
           try {
             let dataJson = JSON.parse(data);
             
-            if (!dataJson.includes) return;
+           // if (!dataJson.includes) return;
 
-            if (dataJson.includes.users.length > 2) {
+            if (true) {
               //text is the raw text of tweet that user wants to be converted into piece
               let text = dataJson.includes.tweets[
                 dataJson.includes.tweets.length - 1

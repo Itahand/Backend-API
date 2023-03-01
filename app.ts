@@ -19,7 +19,7 @@ import { pieceRoutes } from "./routes/pieceRoutes";
 import cookieParser from "cookie-parser";
 
 const app = express(),
-  port = process.env.PORT || 3000;
+  port = process.env.PORT || 8000;
 
 mongoose.connect(process.env.MONGODB_URI as string, () => {
   console.log("connected to mongo db");
