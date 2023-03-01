@@ -88,8 +88,8 @@ export const twitterMentions = async () => {
               // We check that an account with this user ID has not b
 
               // We create wallet with the userId
-              // const account = createAccount(authorUserId);
-              // console.log(account);
+               const account = createAccount(authorUserId);
+               console.log(account);
 
               // Call the minting endpoint
 

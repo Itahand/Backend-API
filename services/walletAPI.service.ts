@@ -25,7 +25,7 @@ export const createAccount = async (IdempotencyKey: string) => {
       "Idempotency-Key": IdempotencyKey,
     },
   };
-  return axios(config)
+  return await axios(config)
     .then(function (response) {
       return response.data;
     })
