@@ -6,6 +6,7 @@
   "engines": {
     "node": "19.4.0"
   },
+  "types": "index.d.ts",
   "scripts": {
     "start": "ts-node app.ts",
     "dev": "nodemon -x ts-node app.ts",
@@ -15,6 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/piecegg/Backend-Blockchain.git"
   },
+  
   "keywords": [
     "piece"
   ],
