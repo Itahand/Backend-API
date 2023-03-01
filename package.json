@@ -7,8 +7,8 @@
     "node": "19.4.0"
   },
   "scripts": {
-    "start": "ts-node src/app.ts",
-    "dev": "nodemon -x ts-node src/app.ts",
+    "start": "ts-node app.ts",
+    "dev": "nodemon -x ts-node app.ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
