@@ -16,7 +16,8 @@ import mongoose from "mongoose";
 import { twitterMentions } from "./utilities/twitterMentions";
 import { stripeRoutes } from "./routes/stripeRoutes.routes";
 import { pieceRoutes } from "./routes/pieceRoutes";
-import cookieParser from "cookie-parser";
+
+const cookieParser = require('cookie-parser');
 
 const app = express(),
   port = process.env.PORT || 8000;
