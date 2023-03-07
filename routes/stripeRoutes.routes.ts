@@ -1,10 +1,11 @@
 import { Router } from "express"; 
 export const stripeRoutes = Router();
 import cors from 'cors';
+import { Piece } from "../models/pieceModel";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST)
 
 stripeRoutes.post("/payment", cors(), async (req, res)=>{
-    let {amount, id} = req.body
+    let {amount, id,listingId} = req.body
 
     try {
         const payment = await stripe.paymentIntents.create({
@@ -15,7 +16,8 @@ stripeRoutes.post("/payment", cors(), async (req, res)=>{
             confirm: true
         })
 
-        console.log("Payment", payment)
+
+        await Piece.updateOne({id:listingId},{isCollected:true,paymentId:payment.id})
         res.json({
             message: "Payment was successful",
             success: true

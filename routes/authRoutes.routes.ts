@@ -110,8 +110,8 @@ authRoutes.get("/twitter", passport.authenticate('twitter', {
 // redirect to home page after successfully login via twitter
 authRoutes.get("/twitter/redirect",
   passport.authenticate("twitter", {
-    successRedirect: process.env.ORIGIN_URL + "/",
-    failureRedirect: process.env.FAILURE_REDIRECT
+    successRedirect: process.env.ORIGIN_URL + "/createPiece",
+    failureRedirect: process.env.ORIGIN_URL + "/Failure",
   })
 );
 
