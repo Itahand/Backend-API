@@ -8,7 +8,6 @@ import cors from "cors";
 import AppError from "./utilities/appError";
 import cookieSession from "cookie-session";
 
-
 import { walletApiRoutes } from "./routes/walletAPI.routes";
 import { authRoutes } from "./routes/authRoutes.routes";
 import passport from "passport";
@@ -17,7 +16,7 @@ import { twitterMentions } from "./utilities/twitterMentions";
 import { stripeRoutes } from "./routes/stripeRoutes.routes";
 import { pieceRoutes } from "./routes/pieceRoutes";
 
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 
 const app = express(),
   port = process.env.PORT || 8000;
@@ -62,6 +61,7 @@ async function bootstrap() {
   app.use("/stripe", stripeRoutes);
   app.use("/piece", pieceRoutes);
 
+  
   const authCheck = function (req: Request, res: Response, next: NextFunction) {
     if (!req.user) {
       res.status(401).json({

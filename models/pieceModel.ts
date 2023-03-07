@@ -9,6 +9,7 @@ const pieceModel = new Schema({
   createdAt: String,
   isCollected: Boolean,
   amount: Number,
+  image:String
 });
 
 export const Piece = mongoose.model("piece", pieceModel);

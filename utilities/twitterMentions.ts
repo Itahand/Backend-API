@@ -48,32 +48,51 @@ export const twitterMentions = async () => {
           console.log("User mentioned a Tweet");
           try {
             let dataJson = JSON.parse(data);
-            
-           // if (!dataJson.includes) return;
+         
+            if (!dataJson.includes) return;
 
             if (true) {
-              //text is the raw text of tweet that user wants to be converted into piece
-              let text = dataJson.includes.tweets[
-                dataJson.includes.tweets.length - 1
-              ].text;
-              
-              //save the tweet data for listing page 
-              let listingId = await savePieceListingData(dataJson.data.id ,"1",dataJson.includes.users[1].name,dataJson.data.created_at,text)
+             
+              let text =
+                dataJson.includes.tweets.filter((e: any) => {
+                  return e.id == dataJson.data.conversation_id;
+                }).length != 0
+                  ? dataJson.includes.tweets.filter((e: any) => {
+                      return e.id == dataJson.data.conversation_id;
+                    })[0].text
+                  : []; 
 
+                  let authorUserName =
+                  dataJson.includes.users.filter((e: any) => {
+                    return e.id == dataJson.data.author_id;
+                  }).length != 0
+                    ? dataJson.includes.users.filter((e: any) => {
+                        return e.id == dataJson.data.author_id;
+                      })[0].username
+                    : [];
+             
+              //save the tweet data for listing page
+              let listingId = await savePieceListingData(
+                dataJson.data.id,
+                "1",
+                authorUserName,
+                dataJson.data.created_at,
+                text
+              );
 
-              let imageLink = process.env.ORIGIN_URL+"/listing/"+listingId;
+              let imageLink = process.env.ORIGIN_URL + "/listing/" + listingId;
               //console.log(dataJson)
 
-              await refreshedClient.v2.tweet({
-                text: imageLink,
-                reply: {
-                  in_reply_to_tweet_id: dataJson.includes.tweets[0].id,
-                  exclude_reply_user_ids: [
-                    dataJson.includes.tweets[0].in_reply_to_user_id,
-                  ],
-                },
-              });
-              console.log("tweet send");
+              // await refreshedClient.v2.tweet({
+              //   text: imageLink,
+              //   reply: {
+              //     in_reply_to_tweet_id: dataJson.includes.tweets[0].id,
+              //     exclude_reply_user_ids: [
+              //       dataJson.includes.tweets[0].in_reply_to_user_id,
+              //     ],
+              //   },
+              // });
+              // console.log("tweet send");
 
               let authorUserId =
                 dataJson.includes.users.filter((e: any) => {
@@ -84,12 +103,11 @@ export const twitterMentions = async () => {
                     })[0].author_id
                   : [];
 
-              
               // We check that an account with this user ID has not b
 
               // We create wallet with the userId
-               const account = createAccount(authorUserId);
-               console.log(account);
+              //const account = createAccount(authorUserId);
+             // console.log(account);
 
               // Call the minting endpoint
 
