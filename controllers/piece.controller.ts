@@ -96,6 +96,7 @@ let createImage = async (
 
 </body></html>
         `,
+        puppeteerArgs: { args: ["--no-sandbox"] }
   });
 
   return "data:image/png;base64," + image.toString("base64");
