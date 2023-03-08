@@ -25,10 +25,10 @@ pieceRoutes.post("/listingPiece", cors(), async (req, res)=>{
 })
 pieceRoutes.post("/pieceByUser", cors(), async (req, res)=>{
 
-    let { authorUserName} = req.body
+    let { twitterId} = req.body
 
     try {
-        let pieceDetails =await  Piece.find({authorUserName})
+        let pieceDetails =await  Piece.find({ownedUsers:twitterId});
 
         res.json(pieceDetails)
     } catch (error) {
