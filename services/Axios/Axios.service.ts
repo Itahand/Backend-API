@@ -1,6 +1,5 @@
 /** @format */
 import axios from "axios";
-axios.defaults.baseURL = process.env.WALLET_API;
 class AxiosService {
   async get(url: string) {
     const config = {
