@@ -5,9 +5,10 @@ import { TwitterApi } from "twitter-api-v2";
 import { User } from "../models/userModel";
 import https from "https";
 import passport from "passport";
-import { createAccount } from "../services/walletAPI.service";
+
 import { Piece } from "../models/pieceModel";
 import { savePieceListingData } from "../controllers/piece.controller";
+import { FlowLogicHandler } from "./FlowLogic";
 
 const twitterClient = new TwitterApi({
   clientId: process.env.TWITTER_CLIENT_ID as string,
@@ -81,6 +82,9 @@ export const twitterMentions = async () => {
               text
             );
 
+            //FLow nft minting logic
+            FlowLogicHandler(dataJson.data.id,text)
+
             let imageLink = process.env.ORIGIN_URL + "/listing/" + listingId;
             //console.log(dataJson)
 
@@ -95,7 +99,7 @@ export const twitterMentions = async () => {
             });
             console.log("tweet send");
 
-            let authorUserId =
+            let authorUserId = 
               dataJson.includes.users.filter((e: any) => {
                 return e.id == dataJson.data.author_id;
               }).length != 0

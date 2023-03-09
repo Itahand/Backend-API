@@ -8,7 +8,7 @@ import cors from "cors";
 import AppError from "./utilities/appError";
 import cookieSession from "cookie-session";
 
-import { walletApiRoutes } from "./routes/walletAPI.routes";
+
 import { authRoutes } from "./routes/authRoutes.routes";
 import passport from "passport";
 import mongoose from "mongoose";
@@ -33,6 +33,9 @@ async function bootstrap() {
       keys: [process.env.COOKIE_KEY as string],
       secret: "UUpLrNbGzAdypcEPNNQocsbAUBR8YdepNrliqaP",
       maxAge: 24 * 60 * 60 * 100,
+      secure: process.env.NODE_ENV === 'development' ? false : true,
+      httpOnly: process.env.NODE_ENV === 'development' ? false : true,
+      sameSite: process.env.NODE_ENV === 'development' ? false : 'none',
     })
   );
   twitterMentions();
@@ -54,9 +57,9 @@ async function bootstrap() {
       credentials: true, // allow session cookie from browser to pass through
     })
   );
-
+  app.enable('trust proxy');
   // set up routes
-  app.use("/walletApi", walletApiRoutes);
+
   app.use("/auth", authRoutes);
   app.use("/stripe", stripeRoutes);
   app.use("/piece", pieceRoutes);
