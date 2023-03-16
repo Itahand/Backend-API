@@ -27,19 +27,14 @@ class FlowService {
   }
 
   // Upload Metadata to the Pieces contract
-  async uploadMetadata(
-    _twitterId: number,
-    _description: string,
-    _image: string,
-    _ipfsCID: string
-  ) {
+  async uploadMetadata(_twitterId: string, _description: string, _url: string) {
     try {
       var data = JSON.stringify({
         code: uploadMetadataScript(),
         arguments: [
           {
             type: "UInt64",
-            value: _twitterId.toString(),
+            value: _twitterId,
           },
           {
             type: "String",
@@ -47,11 +42,7 @@ class FlowService {
           },
           {
             type: "String",
-            value: _image,
-          },
-          {
-            type: "String",
-            value: _ipfsCID,
+            value: _url,
           },
         ],
       });
@@ -67,14 +58,14 @@ class FlowService {
     }
   }
 
-  async mintNFT(metadataId: number, address: string) {
+  async mintNFT(metadataId: string, address: string) {
     try {
       let data = JSON.stringify({
         code: mintNFTScript(),
         arguments: [
           {
             type: "UInt64",
-            value: metadataId.toString(),
+            value: metadataId,
           },
           {
             type: "Address",

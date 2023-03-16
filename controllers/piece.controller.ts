@@ -6,7 +6,6 @@ const _data = font2base64.encodeToDataUrlSync(
 );
 
 export const savePieceListingData = async (
-  id: String,
   amount: String,
   authorName: String,
   createdAt: String,

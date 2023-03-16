@@ -8,7 +8,7 @@ import passport from "passport";
 
 import { Piece } from "../models/pieceModel";
 import { savePieceListingData } from "../controllers/piece.controller";
-import { FlowLogicHandler } from "./FlowLogic";
+
 import walletAPIService from "../services/Wallet/walletAPI.service";
 import FlowService from "../services/Flow/Flow.service";
 
@@ -67,11 +67,13 @@ export const twitterMentions = async () => {
             //returning in case of same mentions as of reply
             if (typeof text != "string") return;
 
+            let walletAddress;
 
             // find current user in UserModel
             const currentUser = await User.findOne({
               twitterId: dataJson.data.in_reply_to_user_id,
             });
+
 
             let authorUserName =
               dataJson.includes.users.filter((e: any) => {
@@ -89,28 +91,9 @@ export const twitterMentions = async () => {
                     return e.id == dataJson.data.in_reply_to_user_id;
                   })[0].name
                 : [];
-
-            // create new user if the database doesn't have this user
-            if (!currentUser) {
-              const account = await walletAPIService.createAccount();
-
-              const newUser = await new User({
-                name: authorName,
-                username: authorUserName,
-                twitterId: dataJson.data.in_reply_to_user_id,
-                walletAddress: account.address,
-              }).save();
-            }
-
-            const jobResponse = await FlowService.uploadMetadata(
-              dataJson.data.in_reply_to_user_id,
-              text,
-              "/Alex1.png",
-              "bafybeihkurbbjxq5v7ag62ahvatrvizmv4tqebzzm26nz6ils4nxgh5ko4"
-            );
-            //save the tweet data for listing page
-            let listingId = await savePieceListingData(
-              dataJson.data.id,
+            
+             //save the tweet data for listing page
+             let listingId = await savePieceListingData(
               "1",
               authorUserName,
               dataJson.data.created_at,
@@ -118,12 +101,47 @@ export const twitterMentions = async () => {
             );
 
 
+           
+            // create new user if the database doesn't have this user
+            if (!currentUser) {
 
-            let imageLink = process.env.ORIGIN_URL + "/listing/" + listingId;
+              const account = await walletAPIService.createAccount();
+              const newUser = await new User({
+                name: authorName,
+                username: authorUserName,
+                twitterId: dataJson.data.in_reply_to_user_id,
+                walletAddress: account.address,
+              }).save();
+              walletAddress = account.address;
+            }
+            else{
+              walletAddress = currentUser.walletAddress;
+            }
+            let imageLink = process.env.BACKEND_API + "piece/previewImage/"+ listingId
+
+            const jobResponse2 = await FlowService.setupAccount(walletAddress);
+            console.log("Job NUMBER 2 responses", jobResponse2);
+
+
+            const jobResponse = await FlowService.uploadMetadata(
+              dataJson.data.in_reply_to_user_id,
+              text,
+              imageLink
+            );
+           console.log("Job NUMBER 1 responses", jobResponse);
+
+          
+
+             // Mint NFT into account
+            const jobResponse3 = await FlowService.mintNFT(dataJson.data.in_reply_to_user_id,walletAddress);
+            console.log("Job NUMBER 3 responses", jobResponse3);
+
+
+            let listingLink = process.env.ORIGIN_URL + "/listing/" + listingId;
             //console.log(dataJson)
 
             await refreshedClient.v2.tweet({
-              text: imageLink,
+              text: listingLink,
               reply: {
                 in_reply_to_tweet_id: dataJson.includes.tweets[0].id,
                 exclude_reply_user_ids: [
