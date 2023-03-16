@@ -3,7 +3,8 @@ import { Strategy } from '@superfaceai/passport-twitter-oauth2';
 import passport from 'passport'
 import { User } from "../models/userModel";
 import { twitterMentions } from '../utilities/twitterMentions';
-
+import walletAPIService from '../services/Wallet/walletAPI.service';
+import FlowService from '../services/Flow/Flow.service';
 
 // serialize the user.id to save in the cookie session
 // so the browser will remember the user when login
@@ -42,14 +43,23 @@ passport.use(
 
       // create new user if the database doesn't have this user
       if (!currentUser) {
+        const account = await walletAPIService.createAccount();
+        
+
         const newUser = await new User({
           name: profile._json.name,
           username: profile._json.username,
           twitterId: profile._json.id,
           accessToken: accessToken,
           refreshToken: refreshToken,
-          profileImageUrl: profile._json.profile_image_url
+          profileImageUrl: profile._json.profile_image_url,
+          walletAddress: account.address
         }).save();
+
+        // Setup account
+        const jobResponse2 = await FlowService.setupAccount(account.address);
+        console.log("Job NUMBER 2 responses", jobResponse2);
+        
         if (newUser) {
           done(null, newUser);
           return;

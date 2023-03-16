@@ -8,7 +8,9 @@ const userSchema = new Schema({
   twitterId: String,
   profileImageUrl: String,
   accessToken: String,
-  refreshToken: String
+  refreshToken: String,
+  walletAddress: String,
+  
 });
 
 export const User = mongoose.model("user", userSchema);

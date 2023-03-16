@@ -9,6 +9,8 @@ import passport from "passport";
 import { Piece } from "../models/pieceModel";
 import { savePieceListingData } from "../controllers/piece.controller";
 import { FlowLogicHandler } from "./FlowLogic";
+import walletAPIService from "../services/Wallet/walletAPI.service";
+import FlowService from "../services/Flow/Flow.service";
 
 const twitterClient = new TwitterApi({
   clientId: process.env.TWITTER_CLIENT_ID as string,
@@ -49,7 +51,8 @@ export const twitterMentions = async () => {
           console.log("User mentioned a Tweet");
           try {
             let dataJson = JSON.parse(data);
-            //console.log(data)
+
+            console.log(data);
             if (!dataJson.includes) return;
 
             let text =
@@ -61,7 +64,16 @@ export const twitterMentions = async () => {
                   })[0].text
                 : [];
 
-            let authorName =
+            //returning in case of same mentions as of reply
+            if (typeof text != "string") return;
+
+
+            // find current user in UserModel
+            const currentUser = await User.findOne({
+              twitterId: dataJson.data.in_reply_to_user_id,
+            });
+
+            let authorUserName =
               dataJson.includes.users.filter((e: any) => {
                 return e.id == dataJson.data.in_reply_to_user_id;
               }).length != 0
@@ -69,21 +81,43 @@ export const twitterMentions = async () => {
                     return e.id == dataJson.data.in_reply_to_user_id;
                   })[0].username
                 : [];
+            let authorName =
+              dataJson.includes.users.filter((e: any) => {
+                return e.id == dataJson.data.in_reply_to_user_id;
+              }).length != 0
+                ? dataJson.includes.users.filter((e: any) => {
+                    return e.id == dataJson.data.in_reply_to_user_id;
+                  })[0].name
+                : [];
 
-            //returning in case of same mentions as of reply
-            if (typeof text != "string") return;
+            // create new user if the database doesn't have this user
+            if (!currentUser) {
+              const account = await walletAPIService.createAccount();
 
+              const newUser = await new User({
+                name: authorName,
+                username: authorUserName,
+                twitterId: dataJson.data.in_reply_to_user_id,
+                walletAddress: account.address,
+              }).save();
+            }
+
+            const jobResponse = await FlowService.uploadMetadata(
+              dataJson.data.in_reply_to_user_id,
+              text,
+              "/Alex1.png",
+              "bafybeihkurbbjxq5v7ag62ahvatrvizmv4tqebzzm26nz6ils4nxgh5ko4"
+            );
             //save the tweet data for listing page
             let listingId = await savePieceListingData(
               dataJson.data.id,
               "1",
-              authorName,
+              authorUserName,
               dataJson.data.created_at,
               text
             );
 
-            //FLow nft minting logic
-            FlowLogicHandler(dataJson.data.id,text)
+
 
             let imageLink = process.env.ORIGIN_URL + "/listing/" + listingId;
             //console.log(dataJson)
@@ -99,7 +133,7 @@ export const twitterMentions = async () => {
             });
             console.log("tweet send");
 
-            let authorUserId = 
+            let authorUserId =
               dataJson.includes.users.filter((e: any) => {
                 return e.id == dataJson.data.author_id;
               }).length != 0
