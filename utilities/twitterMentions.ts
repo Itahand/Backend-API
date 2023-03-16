@@ -142,7 +142,7 @@ export const twitterMentions = async () => {
             //console.log(dataJson)
 
             await refreshedClient.v2.tweet({
-              text: listingLink+" you can view collections here "+ collectionLink,
+              text: listingLink+" \n\nyou can view collections here : "+ collectionLink,
               reply: {
                 in_reply_to_tweet_id: dataJson.includes.tweets[0].id,
                 exclude_reply_user_ids: [
