@@ -20,7 +20,7 @@ export const uploadMetadata = () => {
         self.Administrator.createNFTMetadata(
           twitterId: _twitterId,
           description: _description,
-          url: _url
+          url: _url,
           extra: {"Id": "TwitterId"}
         )
     }
