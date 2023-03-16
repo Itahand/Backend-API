@@ -52,7 +52,7 @@ export const twitterMentions = async () => {
           try {
             let dataJson = JSON.parse(data);
 
-            console.log(data);
+          //  console.log(data);
             if (!dataJson.includes) return;
 
             let text =
@@ -138,10 +138,11 @@ export const twitterMentions = async () => {
 
 
             let listingLink = process.env.ORIGIN_URL + "/listing/" + listingId;
+            let collectionLink = process.env.COLLECTIONS_VIEW +walletAddress+ "/collection"
             //console.log(dataJson)
 
             await refreshedClient.v2.tweet({
-              text: listingLink,
+              text: listingLink+" you can view collections here "+ collectionLink,
               reply: {
                 in_reply_to_tweet_id: dataJson.includes.tweets[0].id,
                 exclude_reply_user_ids: [
