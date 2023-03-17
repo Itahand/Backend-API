@@ -17,8 +17,8 @@ stripeRoutes.post("/payment", cors(), async (req, res)=>{
         })
 
         let pieceDetails = await Piece.findOne({id:listingId});
-
         let totalPiecesCollected = pieceDetails?.totalPiecesCollected?pieceDetails?.totalPiecesCollected +1:1;
+        
         await Piece.updateOne({id:listingId},{isCollected:true,totalPiecesCollected:totalPiecesCollected,$push:{"ownedUsers":twitterId}})
         res.json({
             message: "Payment was successful",

@@ -38,7 +38,7 @@ async function bootstrap() {
       sameSite: process.env.NODE_ENV === 'development' ? false : 'none',
     })
   );
-  twitterMentions();
+  //twitterMentions();
   // 1.Body Parser
   app.use(express.json({ limit: "10kb" }));
   // parse cookies

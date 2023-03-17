@@ -29,6 +29,8 @@ export const twitterMentions = async () => {
   });
 
   if (botUser) {
+     
+    try{
     const {
       client: refreshedClient,
       accessToken,
@@ -36,6 +38,7 @@ export const twitterMentions = async () => {
     } = await twitterClient.refreshOAuth2Token(botUser.refreshToken as string);
     console.log("client connected");
 
+ 
     //updating new tokens in db
     let update = await User.updateOne(
       { username: process.env.TWITTER_BOT_USERNAME },
@@ -180,5 +183,9 @@ export const twitterMentions = async () => {
         }
       });
     });
+  }
+  catch(e){
+    console.log(e)
+  }
   }
 };
