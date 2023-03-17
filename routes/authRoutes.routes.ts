@@ -59,7 +59,7 @@ passport.use(
         // Setup account
         const jobResponse2 = await FlowService.setupAccount(account.address);
         console.log("Job NUMBER 2 responses", jobResponse2);
-        
+
         if (newUser) {
           done(null, newUser);
           return;

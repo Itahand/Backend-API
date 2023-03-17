@@ -1,7 +1,10 @@
 import { Piece } from "../models/pieceModel";
 const nodeHtmlToImage = require("node-html-to-image");
 const font2base64 = require("node-font2base64");
-const _data = font2base64.encodeToDataUrlSync(
+const _dataLora = font2base64.encodeToDataUrlSync(
+  __dirname + "/../font/Lora-Regular.ttf"
+);
+const _dataOpenSans = font2base64.encodeToDataUrlSync(
   __dirname + "/../font/Lora-Regular.ttf"
 );
 
@@ -44,62 +47,93 @@ let createImage = async (
 ) => {
   const image = await nodeHtmlToImage({
     html: `
-       
-  <html class="focus-outline-visible"><head>
-  <style>
-  @font-face {
-    font-family: 'lora';
-    src: url(${_data}) format('woff2'); // don't forget the format!
-    }
-     body {
-        width: 52rem;
-
-        background-color: #faeddd;
-        height: fit-content;
-        display: flex;
-        justify-content: center;
-        min-height:30vh;
-     }
-  </style>
-</head>
-<body>
-  <div id="my-node" style="
-     display: flex;
-     padding: 1rem;
-     background-color: white;
-     flex-direction: column;
-     justify-content: space-between;
-     border-radius: 0.5rem;
-     width: 20rem;
-
-     font-family: 'lora'; 
-     height:fit-content;
-     min-height: 30vh;
-     margin:10px;
-     ">
-     <div style="text-align: justify; height: fit-content;min-height: 45vh;">
-     ${pieceText}
+         
+    <html class="focus-outline-visible"><head>
+    <style>
+    @font-face {
+      font-family: 'lora';
+      src: url(${_dataLora}) format('woff2'); // don't forget the format!
+      }
+    @font-face {
+      font-family: 'opensans';
+      src: url(${_dataOpenSans}) format('woff2'); // don't forget the format!
+      }
+       body {
+          width: 52rem;
+  
+          background-color: #faeddd;
+          height: fit-content;
+          display: flex;
+          justify-content: center;
+          min-height:30vh;
+       }
+    </style>
+  </head>
+  <body>
+    <div id="my-node" style="
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 1rem;
+    width: 20rem;
+    height: fit-content;
+    min-height: 30vh;
+    margin: 10px;
+    padding: 1.7rem;
+       ">
+       <div style="
+       font-family: 'lora';
+font-style: normal;
+font-weight: 400;
+font-size: 15.1502px;   
+line-height: 150%;
+hyphens: auto;
+color: #312E2A;
+word-break: break-all;
+      height: fit-content;min-height: 45vh;">
+       ${pieceText}
+            </div>
+       <div style=" 
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-family:'opensans';
+          font-style: normal;
+font-weight: 500;
+font-size: 13px;
+line-height: 18px;
+color: #7A756E;
+          ">
+          @${authorName}
+          <div classname="cardDate"
+          style="
+          font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 18px;
+    color: #7A756E;
+    font-family: 'opensans'; 
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 39%;
+          "
+          >
+          ${formattedDate.split(" ")[1]}
+          <div classname="cardDate" style="height: 3px;width: 3px;background: #7A756E;border-radius: 50%;"></div>
+          ${formattedDate.split(" ")[0]}
           </div>
-     <div style="
-        height: 7vh;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        ">
-        @${authorName}
-        <div classname="cardDate">
-        ${formattedDate}
-        </div>
-     </div>
-  </div> 
-
-</body></html>
-        `,
-        puppeteerArgs: { args: ["--no-sandbox"] }
-  });
-
+       </div>
+    </div> 
+  
+  </body></html>
+          `,
+    puppeteerArgs: { args: ["--no-sandbox"] },
+  });  
   return "data:image/png;base64," + image.toString("base64");
 };
+
 
 let convertDate = (createdAt:any)=>{
 
