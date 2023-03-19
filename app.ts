@@ -15,6 +15,7 @@ import mongoose from "mongoose";
 import { twitterMentions } from "./utilities/twitterMentions";
 import { stripeRoutes } from "./routes/stripeRoutes.routes";
 import { pieceRoutes } from "./routes/pieceRoutes";
+import { botRoutes } from "./routes/botRoutes.routes";
 
 const cookieParser = require("cookie-parser");
 
@@ -38,7 +39,7 @@ async function bootstrap() {
       sameSite: process.env.NODE_ENV === 'development' ? false : 'none',
     })
   );
-  //twitterMentions();
+  twitterMentions();
   // 1.Body Parser
   app.use(express.json({ limit: "10kb" }));
   // parse cookies
@@ -63,6 +64,7 @@ async function bootstrap() {
   app.use("/auth", authRoutes);
   app.use("/stripe", stripeRoutes);
   app.use("/piece", pieceRoutes);
+  app.use("/bot", botRoutes);
 
   
   const authCheck = function (req: Request, res: Response, next: NextFunction) {
