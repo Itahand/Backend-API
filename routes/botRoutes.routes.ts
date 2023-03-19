@@ -10,7 +10,7 @@ const twitterClient = new TwitterApi({
   clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
 });
 
-const callbackURL = "http://127.0.0.1:8000/bot/callback";
+const callbackURL = process.env.BACKEND_API +"/bot/callback";
 
 botRoutes.get("/auth", async (req, res) => {
   const { url, codeVerifier, state } = twitterClient.generateOAuth2AuthLink(
