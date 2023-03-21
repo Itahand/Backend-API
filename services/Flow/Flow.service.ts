@@ -58,14 +58,18 @@ class FlowService {
     }
   }
 
-  async mintNFT(metadataId: string, address: string) {
+  async mintNFT(twitterId: string, tweetText: string, address: string) {
     try {
       let data = JSON.stringify({
         code: mintNFTScript(),
         arguments: [
           {
             type: "UInt64",
-            value: metadataId,
+            value: twitterId,
+          },
+          {
+            type: "String",
+            value: tweetText,
           },
           {
             type: "Address",
